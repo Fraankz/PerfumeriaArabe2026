@@ -36,7 +36,7 @@ for (const method of ['log', 'info', 'warn', 'error', 'debug'] as const) {
 }
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL || 'postgresql://localhost:5432/dummy',
 });
 const adapter = NeonAdapter(pool);
 
