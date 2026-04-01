@@ -4,7 +4,12 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:4000',
+    /\.vercel\.app$/
+  ]
+}));
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -13,6 +18,9 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
+  ssl: {
+    rejectUnauthorized: true
+  }
 });
 
 db.connect((err) => {
