@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-const API_URL = 'http://localhost:3001/api/perfumes';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/perfumes';
 
 const GENDER_LABELS = { Men: 'Hombre', Women: 'Mujer', Unisex: 'Unisex' };
 
