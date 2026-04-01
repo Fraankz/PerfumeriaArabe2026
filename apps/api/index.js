@@ -7,7 +7,8 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:4000',
-    /\.vercel\.app$/
+    'https://catalogo-perfumes-fr-2026.onrender.com',
+    /\.onrender\.com$/
   ]
 }));
 app.use(express.json());
