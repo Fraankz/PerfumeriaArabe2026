@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd apps/web && npm install && react-router build",
+  "buildCommand": "cd apps/web && npm install && npx react-router build",
   "outputDirectory": "apps/web/build/client",
   "framework": null,
   "rewrites": [
