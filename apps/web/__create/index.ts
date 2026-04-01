@@ -251,7 +251,12 @@ app.use('/api/auth/*', async (c, next) => {
 });
 app.route(API_BASENAME, api);
 
-export default await createHonoServer({
+const server = createHonoServer({
   app,
   defaultLogger: false,
+  listeningListener: (info) => {
+    console.log(`🚀 Server running on port ${info.port}`);
+  },
 });
+
+export default server;
