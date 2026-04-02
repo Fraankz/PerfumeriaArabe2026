@@ -257,7 +257,6 @@ export default function PerfumePage() {
           max-width: 380px;
           font-weight: 300;
           display: -webkit-box;
-          -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
