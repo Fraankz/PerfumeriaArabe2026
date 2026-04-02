@@ -1,9 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import SearchAutocomplete from './SearchAutocomplete';
 
-const API_URL = 'https://catalogo-fr-2026.onrender.com/api/perfumes';
+//const API_URL = 'https://catalogo-fr-2026.onrender.com/api/perfumes'; // URL directa en caso de que no funcione la línea de abajo
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/perfumes';
 
 const GENDER_LABELS = { Men: 'Hombre', Women: 'Mujer', Unisex: 'Unisex' };
+
+const BESTSELLERS = [
+  'esta-puro',
+  'khamrah',
+  'khamrah-qahwa',
+  'vulcan-feu',
+  'liquid-brun',
+  'neroli-riviera',
+  'odyssey-mandarin-sky',
+  'odyssey-mandarin-sky-elixir',
+  'club-de-nuit-intense-man',
+];
 
 const FAMILY_LABELS = {
   Oriental: 'Oriental',
@@ -44,6 +58,7 @@ export default function CatalogPage() {
   const [activeFamily, setActiveFamily] = useState('Todas');
   const [activeBrand, setActiveBrand] = useState('Todas');
   const navigate = useNavigate();
+  const [showBestsellers, setShowBestsellers] = useState(false);
 
   useEffect(() => {
     fetch(API_URL)
@@ -59,6 +74,10 @@ export default function CatalogPage() {
 
   useEffect(() => {
     let result = perfumes;
+
+    if (showBestsellers) {
+      result = result.filter((p) => BESTSELLERS.includes(p.slug));
+    }
 
     if (activeGender !== 'Todos') {
       result = result.filter((p) => p.gender === activeGender);
@@ -83,7 +102,7 @@ export default function CatalogPage() {
     }
 
     setFiltered(result);
-  }, [search, activeGender, activeFamily, activeBrand, perfumes]);
+  }, [search, activeGender, activeFamily, activeBrand, showBestsellers, perfumes]);
 
   const families = ['Todas', ...new Set(perfumes.map((p) => p.fragrance_family).filter(Boolean))];
   const genders = ['Todos', 'Men', 'Women', 'Unisex'];
@@ -509,16 +528,11 @@ export default function CatalogPage() {
           <p className="header-sub">Fragancias de Oriente</p>
         </header>
 
-        <div className="search-wrap">
-          <span className="search-icon">✦</span>
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Buscar por nombre, marca..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+          <SearchAutocomplete
+            perfumes={perfumes}
+            onSelect={(p) => navigate(`/perfume/${p.slug}`)}
+            onSearchChange={(val) => setSearch(val)}
           />
-        </div>
 
         <div className="filters">
           <div className="filter-block">
@@ -535,6 +549,16 @@ export default function CatalogPage() {
               ))}
             </div>
           </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
+  <button
+    className={`filter-btn ${showBestsellers ? 'active' : ''}`}
+    onClick={() => setShowBestsellers(!showBestsellers)}
+    style={showBestsellers ? { background: '#c9a84c20', borderColor: '#c9a84c', color: '#c9a84c' } : {}}
+  >
+    ★ Best Sellers
+  </button>
+</div>
 
           <div className="filter-block">
             <span className="filter-label">Familia Olfativa</span>
@@ -577,7 +601,7 @@ export default function CatalogPage() {
         ) : (
           <>
             <div className="stats">
-              {filtered.length} {filtered.length === 1 ? 'fragancia encontrada' : 'fragancias encontradas'}
+              {/*filtered.length} {filtered.length === 1 ? 'fragancia encontrada' : 'fragancias encontradas'*/}
             </div>
 
             <div style={{ paddingBottom: '80px' }}>
